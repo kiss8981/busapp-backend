@@ -124,7 +124,7 @@ let AuthService = class AuthService {
         const payload = { sub: user.id, provider: user.providerId, tokenType };
         return this.jwtService.sign(payload, {
             secret: process.env.JWT_SECRET,
-            expiresIn: tokenType === 'access' ? '3h' : '7d',
+            expiresIn: tokenType === 'access' ? '1d' : '7d',
         });
     }
     async validationToken(token, tokenType) {
