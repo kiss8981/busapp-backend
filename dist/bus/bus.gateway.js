@@ -28,6 +28,7 @@ let BusGateway = class BusGateway {
         try {
             const isAthenticate = await this.busService.authenticate(client, data.provider, data.token);
             (0, socket_response_1.createSocketResponse)(client, 'authenticate', isAthenticate);
+            this.logger.log(`Authenticate : ${client.id} - ${data.provider}`);
         }
         catch (error) {
             this.logger.error(error);
@@ -37,6 +38,7 @@ let BusGateway = class BusGateway {
     async handleLocationUpdateEvent(data, client) {
         try {
             await this.busService.locationUpdate(this.server, client.id, data);
+            this.logger.log(`Location Update : ${client.id} - ${data.busId}`);
         }
         catch (error) {
             this.logger.error(error);
@@ -56,12 +58,9 @@ let BusGateway = class BusGateway {
     afterInit() {
         this.logger.log('BusGateway Initialized');
     }
-    handleDisconnect(client) {
-        this.logger.log(`Client Disconnected : ${client.id}`);
+    handleDisconnect() {
     }
-    handleConnection(client) {
-        this.busService.disconnect(client.id);
-        this.logger.log(`Client Connected : ${client.id}`);
+    handleConnection() {
     }
 };
 exports.BusGateway = BusGateway;

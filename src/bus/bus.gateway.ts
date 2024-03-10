@@ -42,6 +42,7 @@ export class BusGateway
         data.token,
       );
       createSocketResponse(client, 'authenticate', isAthenticate);
+      this.logger.log(`Authenticate : ${client.id} - ${data.provider}`);
     } catch (error: any) {
       this.logger.error(error);
       createSocketResponse(client, 'authenticate', false, error.message);
@@ -55,6 +56,7 @@ export class BusGateway
   ): Promise<void> {
     try {
       await this.busService.locationUpdate(this.server, client.id, data);
+      this.logger.log(`Location Update : ${client.id} - ${data.busId}`);
     } catch (error: any) {
       this.logger.error(error);
       createSocketResponse(client, 'locationupdate', null, error.message);
@@ -82,12 +84,11 @@ export class BusGateway
     this.logger.log('BusGateway Initialized');
   }
 
-  handleDisconnect(client: Socket) {
-    this.logger.log(`Client Disconnected : ${client.id}`);
+  handleDisconnect() {
+    // this.logger.log(`Client Disconnected : ${client.id}`);
   }
 
-  handleConnection(client: Socket) {
-    this.busService.disconnect(client.id);
-    this.logger.log(`Client Connected : ${client.id}`);
+  handleConnection() {
+    // this.logger.log(`Client Connected : ${client.id}`);
   }
 }

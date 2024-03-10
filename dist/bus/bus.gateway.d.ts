@@ -11,6 +11,6 @@ export declare class BusGateway implements OnGatewayInit, OnGatewayConnection, O
     handleLocationUpdateEvent(data: BusLocationUpdateDto, client: Socket): Promise<void>;
     handleProviderLocationUpdateJoinEvent(data: BusProviderLocationUpdateJoinDto, client: Socket): Promise<void>;
     afterInit(): void;
-    handleDisconnect(client: Socket): void;
-    handleConnection(client: Socket): void;
+    handleDisconnect(): void;
+    handleConnection(): void;
 }
