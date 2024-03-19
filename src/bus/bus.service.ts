@@ -4,6 +4,7 @@ import { Redis } from 'ioredis';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Socket, Server } from 'socket.io';
 import {
+  BackgroundBusLocationUpdate,
   BusLocationUpdateDto,
   BusProviderLocationUpdateJoinDto,
 } from 'src/resource/dtos/bus.dto';
@@ -103,6 +104,56 @@ export class BusService {
     if (keys.length === 0) return false;
 
     await this.client.del(keys);
+
+    return true;
+  }
+
+  async backgroundBusLocationUpdate(
+    server: Server,
+    accessToken: string,
+    location: BackgroundBusLocationUpdate,
+  ): Promise<boolean> {
+    const isAuthenticate = await this.client.get(`authenticate:${accessToken}`);
+
+    if (!isAuthenticate) {
+      const provider = await this.prisma.provider.findUnique({
+        where: { id: location.providerId },
+      });
+
+      if (!provider) throw new Error('찾을 수 없는 클라이언트입니다.');
+
+      try {
+        const checkToken = await this.authService.authenticate({
+          token: accessToken,
+          tokenType: 'access',
+          provider: location.providerId,
+        });
+
+        if (!checkToken) throw new Error('인증에 실패했습니다.');
+
+        await this.client.set(
+          `authenticate:${accessToken}`,
+          'true',
+          'EX',
+          60 * 60 * 5,
+        );
+      } catch (error) {
+        if (error.response.status === 401) {
+          throw new Error('인증에 실패했습니다.');
+        } else {
+          throw new Error('서버 에러가 발생했습니다.');
+        }
+      }
+    }
+
+    await this.client.set(
+      `bus:${location.providerId}:${location.busId}:lastlocation`,
+      JSON.stringify(location),
+      'EX',
+      60 * 60 * 3,
+    );
+
+    server.to(location.providerId).emit('locationupdate', location);
 
     return true;
   }

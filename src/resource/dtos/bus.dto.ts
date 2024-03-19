@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsJSON, IsString } from 'class-validator';
 
 export class BusAuthenticateDto {
@@ -34,6 +35,21 @@ export class BusLocationUpdateDto {
     message: '위치 정보를 입력해주세요.',
   })
   location: Location;
+}
+
+export class BackgroundBusLocationUpdate {
+  @IsString({
+    message: '버스 아이디를 입력해주세요.',
+  })
+  busId: string;
+
+  @Type(() => Location)
+  location: Location;
+
+  @IsString({
+    message: '클라이언트 아이디를 입력해주세요.',
+  })
+  providerId: string;
 }
 
 export class BusProviderLocationUpdateJoinDto {

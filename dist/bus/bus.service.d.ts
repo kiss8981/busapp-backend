@@ -1,7 +1,7 @@
 import { Redis } from 'ioredis';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Socket, Server } from 'socket.io';
-import { BusLocationUpdateDto, BusProviderLocationUpdateJoinDto } from 'src/resource/dtos/bus.dto';
+import { BackgroundBusLocationUpdate, BusLocationUpdateDto, BusProviderLocationUpdateJoinDto } from 'src/resource/dtos/bus.dto';
 import { AuthService } from 'src/auth/auth.service';
 export declare class BusService {
     private readonly client;
@@ -13,4 +13,5 @@ export declare class BusService {
     getBusLocations(providerId: string): Promise<any[]>;
     providerLocationUpdateJoin(client: Socket, data: BusProviderLocationUpdateJoinDto): Promise<any[]>;
     disconnect(clientId: string): Promise<boolean>;
+    backgroundBusLocationUpdate(server: Server, accessToken: string, location: BackgroundBusLocationUpdate): Promise<boolean>;
 }

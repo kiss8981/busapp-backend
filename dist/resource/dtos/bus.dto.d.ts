@@ -10,6 +10,11 @@ export declare class BusLocationUpdateDto {
     busId: string;
     location: Location;
 }
+export declare class BackgroundBusLocationUpdate {
+    busId: string;
+    location: Location;
+    providerId: string;
+}
 export declare class BusProviderLocationUpdateJoinDto {
     providerId: string;
 }

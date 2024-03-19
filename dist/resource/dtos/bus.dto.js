@@ -9,7 +9,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BusProviderLocationUpdateJoinDto = exports.BusLocationUpdateDto = exports.Location = exports.BusAuthenticateDto = void 0;
+exports.BusProviderLocationUpdateJoinDto = exports.BackgroundBusLocationUpdate = exports.BusLocationUpdateDto = exports.Location = exports.BusAuthenticateDto = void 0;
+const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
 class BusAuthenticateDto {
 }
@@ -56,6 +57,25 @@ __decorate([
     }),
     __metadata("design:type", Location)
 ], BusLocationUpdateDto.prototype, "location", void 0);
+class BackgroundBusLocationUpdate {
+}
+exports.BackgroundBusLocationUpdate = BackgroundBusLocationUpdate;
+__decorate([
+    (0, class_validator_1.IsString)({
+        message: '버스 아이디를 입력해주세요.',
+    }),
+    __metadata("design:type", String)
+], BackgroundBusLocationUpdate.prototype, "busId", void 0);
+__decorate([
+    (0, class_transformer_1.Type)(() => Location),
+    __metadata("design:type", Location)
+], BackgroundBusLocationUpdate.prototype, "location", void 0);
+__decorate([
+    (0, class_validator_1.IsString)({
+        message: '클라이언트 아이디를 입력해주세요.',
+    }),
+    __metadata("design:type", String)
+], BackgroundBusLocationUpdate.prototype, "providerId", void 0);
 class BusProviderLocationUpdateJoinDto {
 }
 exports.BusProviderLocationUpdateJoinDto = BusProviderLocationUpdateJoinDto;
